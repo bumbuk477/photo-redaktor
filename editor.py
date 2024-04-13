@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5 import QtCore,QtGui,QtWidgets
 from ui import Ui_MainWindow
-from PIL import Image,ImageFilter
+from PIL import Image,ImageFilter,ImageEnhance
 import os
 
 class ImageEditor(QMainWindow):
@@ -17,6 +17,12 @@ class ImageEditor(QMainWindow):
         self.ui.list_files.itemClicked.connect(self.showchosenimage)
         self.ui.btn_bw.clicked.connect(self.do_bw)
         self.ui.btn_blur.clicked.connect(self.do_blur)
+        self.ui.btn_left.clicked.connect(self.do_right)
+        self.ui.btn_right.clicked.connect(self.do_left)
+        self.ui.miror_1.clicked.connect(self.do_mirror)
+        self.ui.btn_kontrast.clicked.connect(self.do_contrast)
+        self.ui.btn_1.clicked.connect(self.do_mirror_tb)
+        self.ui.btn_2.clicked.connect(self.do_diagonal)
 
     def loadimage(self,filename):
         try:
@@ -41,6 +47,75 @@ class ImageEditor(QMainWindow):
     def do_blur(self):
         try:    
             self.photo = self.photo.filter(ImageFilter.BLUR)
+            self.saveimage()
+            image_path = os.path.join(self.workdir,self.save_dir,self.filename)
+            self.showImage(image_path)
+        except:
+            win=QtWidgets.QMessageBox()
+            win.setText("Не вдалося відкрити зображення!")
+            win.exec()
+
+    def do_mirror(self):
+        try:    
+            self.photo = self.photo.transpose(Image.FLIP_LEFT_RIGHT)
+            self.saveimage()
+            image_path = os.path.join(self.workdir,self.save_dir,self.filename)
+            self.showImage(image_path)
+        except:
+            win=QtWidgets.QMessageBox()
+            win.setText("Не вдалося відкрити зображення!")
+            win.exec()
+
+
+    def do_contrast(self):
+        try:    
+            self.photo = ImageEnhance.Contrast(self.photo).enhance(1.5)
+            self.saveimage()
+            image_path = os.path.join(self.workdir,self.save_dir,self.filename)
+            self.showImage(image_path)
+        except:
+            win=QtWidgets.QMessageBox()
+            win.setText("Не вдалося відкрити зображення!")
+            win.exec()
+
+
+
+    def do_left(self):
+        try:    
+            self.photo = self.photo.transpose(Image.ROTATE_90)
+            self.saveimage()
+            image_path = os.path.join(self.workdir,self.save_dir,self.filename)
+            self.showImage(image_path)
+        except:
+            win=QtWidgets.QMessageBox()
+            win.setText("Не вдалося відкрити зображення!")
+            win.exec()
+
+    def do_mirror_tb(self):
+        try:    
+            self.photo = self.photo.transpose(Image.FLIP_TOP_BOTTOM)
+            self.saveimage()
+            image_path = os.path.join(self.workdir,self.save_dir,self.filename)
+            self.showImage(image_path)
+        except:
+            win=QtWidgets.QMessageBox()
+            win.setText("Не вдалося відкрити зображення!")
+            win.exec()
+
+    def do_diagonal(self):
+        try:    
+            self.photo = self.photo.rotate(45)
+            self.saveimage()
+            image_path = os.path.join(self.workdir,self.save_dir,self.filename)
+            self.showImage(image_path)
+        except:
+            win=QtWidgets.QMessageBox()
+            win.setText("Не вдалося відкрити зображення!")
+            win.exec()
+
+    def do_right(self):
+        try:    
+            self.photo = self.photo.transpose(Image.ROTATE_270)
             self.saveimage()
             image_path = os.path.join(self.workdir,self.save_dir,self.filename)
             self.showImage(image_path)
